@@ -1,0 +1,190 @@
+{
+  "version": 4,
+  "terraform_version": "1.14.3",
+  "serial": 14,
+  "lineage": "a367956a-b823-960e-5322-8e946b26a534",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "local_file",
+      "name": "demo",
+      "provider": "provider[\"registry.terraform.io/hashicorp/local\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content": "This file will be destroyed by Terraform.",
+            "content_base64": null,
+            "content_base64sha256": "9YtnMHcFhB8f6wRjY6Vx8kWFWzEgdxObs3qsh2Y0M44=",
+            "content_base64sha512": "gtUiw51ge1atviUpORvizL4DWykjA3a/Mt0JfrL3GFIkQbAmzyFDU/BRll2BoRiiZfSFMtJazl3rvj20jzNOFg==",
+            "content_md5": "fcdab68cd53e8c0b809b08c2f212373f",
+            "content_sha1": "deaa24a41ab7cc0e16d8a047f8b0f4e3f50cf698",
+            "content_sha256": "f58b67307705841f1feb046363a571f245855b312077139bb37aac876634338e",
+            "content_sha512": "82d522c39d607b56adbe2529391be2ccbe035b29230376bf32dd097eb2f718522441b026cf214353f051965d81a118a265f48532d25ace5debbe3db48f334e16",
+            "directory_permission": "0777",
+            "file_permission": "0777",
+            "filename": "destroy_demo.txt",
+            "id": "deaa24a41ab7cc0e16d8a047f8b0f4e3f50cf698",
+            "sensitive_content": null,
+            "source": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "sensitive_content"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "local_file",
+      "name": "demo_file3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/local\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content": "This is the third file out of 3 files",
+            "content_base64": null,
+            "content_base64sha256": "0nGlB01pAfMXfvorWFMnrrLhiP2JY2h7anxbosVCSJA=",
+            "content_base64sha512": "MPbBdMc6ayjSxgmq/Hty0myqivR3xoWd1kp2NBvIy//d4zKYpCtjOAklIip6eR9D6MBGrPI03XHo7fOMzX66KQ==",
+            "content_md5": "63a3ab73f61633a8d9d5e0e5f0d948ff",
+            "content_sha1": "184123454043de6dd69eee16aa3d12e0ec411158",
+            "content_sha256": "d271a5074d6901f3177efa2b585327aeb2e188fd8963687b6a7c5ba2c5424890",
+            "content_sha512": "30f6c174c73a6b28d2c609aafc7b72d26caa8af477c6859dd64a76341bc8cbffdde33298a42b63380925222a7a791f43e8c046acf234dd71e8edf38ccd7eba29",
+            "directory_permission": "0777",
+            "file_permission": "0777",
+            "filename": "file3.txt",
+            "id": "184123454043de6dd69eee16aa3d12e0ec411158",
+            "sensitive_content": null,
+            "source": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "sensitive_content"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "local_file",
+      "name": "file_one",
+      "provider": "provider[\"registry.terraform.io/hashicorp/local\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content": "TEST",
+            "content_base64": null,
+            "content_base64sha256": "lO4FkzXlh+UBzEv5BhPggU8Ap7CLx8ZI/YZaKvaiLMI=",
+            "content_base64sha512": "e/qVpoiSTEfH0iOB8gzJJvUkvqyxP4TiA9S9jLa6L86BxXpfBZvz1QmSZIe96SWzvO4GNeT3uuugVOXbppayvw==",
+            "content_md5": "033bd94b1168d7e4f0d644c3c95e35bf",
+            "content_sha1": "984816fd329622876e14907634264e6f332e9fb3",
+            "content_sha256": "94ee059335e587e501cc4bf90613e0814f00a7b08bc7c648fd865a2af6a22cc2",
+            "content_sha512": "7bfa95a688924c47c7d22381f20cc926f524beacb13f84e203d4bd8cb6ba2fce81c57a5f059bf3d509926487bde925b3bcee0635e4f7baeba054e5dba696b2bf",
+            "directory_permission": "0777",
+            "file_permission": "0777",
+            "filename": "demo_folder/xyz1.txt",
+            "id": "984816fd329622876e14907634264e6f332e9fb3",
+            "sensitive_content": null,
+            "source": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "sensitive_content"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "local_file",
+      "name": "file_two",
+      "provider": "provider[\"registry.terraform.io/hashicorp/local\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content": "This is the second file created by Terraform.",
+            "content_base64": null,
+            "content_base64sha256": "NkkBptbqpwfa1/Wyn/Qu9mKRqiuekC6CTAPseRKvBdU=",
+            "content_base64sha512": "EsW5FMqHZT8c/bRSEoqLMbt4FVr5vvvxbUoBNH18mT3MeedRYnWRpHJ3Fqq6aMS1R101FyK2vWk6cbtkbnfoOg==",
+            "content_md5": "5e52ae720acf0b5f48cc7bcf34f83fe4",
+            "content_sha1": "cb0adbea1f20e0c2e9392999f3ee2daf96fadc15",
+            "content_sha256": "364901a6d6eaa707dad7f5b29ff42ef66291aa2b9e902e824c03ec7912af05d5",
+            "content_sha512": "12c5b914ca87653f1cfdb452128a8b31bb78155af9befbf16d4a01347d7c993dcc79e751627591a4727716aaba68c4b5475d351722b6bd693a71bb646e77e83a",
+            "directory_permission": "0777",
+            "file_permission": "0777",
+            "filename": "demo_folder/xyz2.txt",
+            "id": "cb0adbea1f20e0c2e9392999f3ee2daf96fadc15",
+            "sensitive_content": null,
+            "source": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "sensitive_content"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "local_file",
+      "name": "string_variable_file",
+      "provider": "provider[\"registry.terraform.io/hashicorp/local\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content": "TEST1",
+            "content_base64": null,
+            "content_base64sha256": "hIKRjkcFxr4hAITJ2U4P4vRfz0558tUBPHbkT+HJXUM=",
+            "content_base64sha512": "M82iAUIukw8IZ4nWwT9i80ogkEcuIPRIAXHKB+HqmdidsH/DcEONnPqAFo5ca+FAJ8rZzQntA2p6L1wrH/ku6w==",
+            "content_md5": "db03fa33c1e2ca35794adbb14aebb153",
+            "content_sha1": "ffeb4a18ff1c37e59290c86b92df28f65db584d9",
+            "content_sha256": "8482918e4705c6be210084c9d94e0fe2f45fcf4e79f2d5013c76e44fe1c95d43",
+            "content_sha512": "33cda201422e930f086789d6c13f62f34a2090472e20f4480171ca07e1ea99d89db07fc370438d9cfa80168e5c6be14027cad9cd09ed036a7a2f5c2b1ff92eeb",
+            "directory_permission": "0777",
+            "file_permission": "0777",
+            "filename": "demo_folder/string_variable.txt",
+            "id": "ffeb4a18ff1c37e59290c86b92df28f65db584d9",
+            "sensitive_content": null,
+            "source": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "sensitive_content"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
