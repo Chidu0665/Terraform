@@ -1,0 +1,1 @@
+contentterra="This the value for the content provided from the terraform.tfvars file"
