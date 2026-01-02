@@ -1,1 +1,1 @@
-Interractive way of injecting values to the variable.
+Enter the value for the content variable for interactive way.
