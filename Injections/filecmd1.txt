@@ -1,0 +1,1 @@
+Values provided during the Terraform apply and with file based injection.
