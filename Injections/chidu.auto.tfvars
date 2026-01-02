@@ -1,0 +1,1 @@
+contentauto="This is the variable value provided from chiduauto.tfvars"
