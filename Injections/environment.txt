@@ -1,0 +1,1 @@
+This is the content value passed through envirornment variables

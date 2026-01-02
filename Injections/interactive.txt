@@ -1,1 +1,1 @@
-Enter the value for the content variable for interactive way.
+test
