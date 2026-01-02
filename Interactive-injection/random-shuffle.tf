@@ -1,11 +1,11 @@
-variable input {
-    type=list
-}
+# variable input {
+#     type=list
+# }
 
-resource "random_shuffle" "sample" {
-    input=var.input
-}
+# resource "random_shuffle" "sample" {
+#     input=var.input
+# }
 
-output "result" {
-    value=random_shuffle.sample.result
-}
+# output "result" {
+#     value=random_shuffle.sample.result
+# }
