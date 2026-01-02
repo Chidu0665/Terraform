@@ -1,1 +1,1 @@
-The value for content was injected through the CLI
+Hello world, this is the test content for the output variable demo.

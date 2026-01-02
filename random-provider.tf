@@ -4,7 +4,3 @@ resource "random_string" "random" {
   special          = true
   override_special = "/@£$"
 }
-
-output "random_value" {
-  value = random_string.random.result
-}
