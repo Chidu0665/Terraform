@@ -1,0 +1,44 @@
+{
+  "version": 4,
+  "terraform_version": "1.14.3",
+  "serial": 25,
+  "lineage": "ed80834d-03dc-3f66-f162-ab374a365933",
+  "outputs": {
+    "result": {
+      "value": "Z!!GTM%C",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "random_string",
+      "name": "sample",
+      "provider": "provider[\"registry.terraform.io/hashicorp/random\"]",
+      "instances": [
+        {
+          "schema_version": 2,
+          "attributes": {
+            "id": "Z!!GTM%C",
+            "keepers": null,
+            "length": 8,
+            "lower": true,
+            "min_lower": 0,
+            "min_numeric": 0,
+            "min_special": 0,
+            "min_upper": 0,
+            "number": true,
+            "numeric": true,
+            "override_special": null,
+            "result": "Z!!GTM%C",
+            "special": true,
+            "upper": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
