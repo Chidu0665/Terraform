@@ -1,11 +1,11 @@
-variable filename {
-default=[[1234,1998,1234],["abx.txt","xyz.txt"], [true,false]]
-type=list(list(any))
-}
+# variable filename {
+# default=[[1234,1998,1234],["abx.txt","xyz.txt"], [true,false]]
+# type=list(list(any))
+# }
 
-variable content {
-    type = list(list(number))
-}
+# variable content {
+#     type = list(list(number))
+# }
 
 # variable filename1 {
 # default=true

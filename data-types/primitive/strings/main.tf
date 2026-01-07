@@ -1,8 +1,17 @@
-resource "local_file" "test" {
-  filename = var.filename[1][0]
-  content  = slice(var.content, 1, 3)
+variable "filename11" {
+type = tuple([string,number,list(number)])
+default = ["dghsvd",1132,[1,2.3,5]]
 }
 
+
+variable content1 {
+  default = "Test"
+}
+
+resource "local_file" "sample"{
+    filename = var.filename11[0]
+    content = var.content1
+}
 
 # resource "local_file" "test1" {
 #     filename=var.filename1
