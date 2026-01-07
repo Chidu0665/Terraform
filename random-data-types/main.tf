@@ -1,5 +1,75 @@
 
 
+# data local_file readfile {
+#     filename = "/Users/chidu/Desktop/Devops/terraform/file1.txt"
+# }
+
+# output result {
+#     value = data.local_file.readfile.content
+# }
+
+# resource "local_file" r1 {
+# 	filename = "qwrty.txt"
+#     content  = data.local_file.readfile.content_base64
+# }
+
+# variable "content" {
+#     type = any
+#     default = "Common content"
+# }
+
+# variable filename88 {
+#     type=map
+#     default = {
+#         name="chidu"
+#         phnum=123543567
+#         isactive=true
+
+#     }
+# }
+
+# variable filename99 {
+#     type=map(list(any))
+#     default= {
+#         name=["Chidu", "Hydra"]
+#         phnum=[3546578,23465]
+#         isactive=[true,false]
+#     }
+# }
+
+# resource "local_file" "f8" {
+#     filename = var.filename88.name
+#     content = var.content
+# }
+
+# resource "local_file" "f9" {
+#     filename = var.filename99.name[1]
+#     content = var.content
+# }
+
+# variable content {
+#     default = "test"
+# }
+
+# variable filename12 {
+#     type = object ({
+#         name=string
+#         id=number
+#         address = list(string)
+#     })
+
+#     default = {
+#         name = "Chidu"
+#         id = 0665
+#         address = ["Birur", "Bangalore"]
+#     }
+# }
+
+# resource local_file "sample"{
+#     filename = var.filename12.name
+#     content = var.content
+# }
+
 
 
 
