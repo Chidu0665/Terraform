@@ -1,3 +1,24 @@
+variable "files" {
+  type = map(string)
+  default = {
+    file1 = "Hello from file 1"
+    file2 = "Hello from file 2"
+  }
+}
+
+resource "local_file" "forEHdemo" {
+  for_each = var.files
+
+  filename = "${each.key}.txt"
+  content  = each.value
+}
+
+
+
+
+
+
+
 #count loop for map data type
 # variable "files" {
 #   type = map(string)
