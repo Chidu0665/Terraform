@@ -1,3 +1,28 @@
+locals {
+  filename_upper = [for key,value in var.filenamemap : upper(value)]
+  filename_upper_list = [for value in var.filenamelist : upper(value)]
+  map_upper = {for key,value in var.filenamemap : upper(key) => lower(value)}
+}
+
+variable filenamemap {
+  type = map(string)
+  default = {
+    name1 = "chidu"
+    name2 = "hydra"
+  }
+}
+
+variable "filenamelist" {
+  type = list(string)
+  default = ["Player1","Player2"]
+}
+
+resource "local_file" "test1"{
+  count = length(local.filename_upper)
+  filename = local.filename_upper[count.index]
+  content = "Players list"
+}
+
 # variable "files" {
 #   type = map(string)
 #   default = {
