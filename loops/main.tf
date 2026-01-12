@@ -1,17 +1,17 @@
-variable "files" {
-  type = map(string)
-  default = {
-    file1 = "Hello from file 1"
-    file2 = "Hello from file 2"
-  }
-}
+# variable "files" {
+#   type = map(string)
+#   default = {
+#     file1 = "Hello from file 1"
+#     file2 = "Hello from file 2"
+#   }
+# }
 
-resource "local_file" "forEHdemo" {
-  for_each = var.files
+# resource "local_file" "forEHdemo" {
+#   for_each = var.files
 
-  filename = "${each.key}.txt"
-  content  = each.value
-}
+#   filename = "${each.key}.txt"
+#   content  = each.value
+# }
 
 
 
