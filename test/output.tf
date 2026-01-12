@@ -15,3 +15,15 @@ resource "local_file" "res" {
     filename=var.test.name #same for map object
     content=var.content
 }
+
+terraform{
+    required_providers{
+        local = {
+            source = "hashicorp/local"
+            vaerison = "2.6.2"
+        }
+        random = {
+            source = ""
+        }
+    }
+}
