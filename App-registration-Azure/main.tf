@@ -1,9 +1,16 @@
 data "azurerm_subscription" "current" {}
 
-output "subscription_id" {
-  value = data.azurerm_subscription.current.subscription_id
+resource "azurerm_resource_group" "example" {
+  name     = "rg-terra-chidu"
+  location = "West Europe"
 }
 
-output "subscription_name" {
-  value = data.azurerm_subscription.current.display_name
-}
+# variable "location" {
+#     type = string
+#     default = "east europe"
+
+# }
+# variable "rg_name" {
+#     type = string
+#     default = "east_eupore_rg"
+# }
