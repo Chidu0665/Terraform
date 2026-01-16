@@ -3,4 +3,4 @@
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
-
+/Users/chidu/Desktop/Devops/terraform/App-registration-Azure
