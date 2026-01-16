@@ -4,3 +4,4 @@
 *.tfstate.backup
 .terraform.lock.hcl
 /Users/chidu/Desktop/Devops/terraform/App-registration-Azure
+App-registration-Azure/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.117.1/darwin_amd64/terraform-provider-azurerm_v3.117.1_x5
