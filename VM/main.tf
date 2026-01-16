@@ -41,7 +41,7 @@ resource "azurerm_linux_virtual_machine" "example" {
   name                = "Chidu-machine"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
-  size                = "Standard_D2a_v4"
+  size                = "B2ls_v2"
   admin_username      = "adminuser"
 
   network_interface_ids = [
