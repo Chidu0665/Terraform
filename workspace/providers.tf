@@ -1,5 +1,4 @@
 terraform {
-    
   required_providers {
     random = {
       source  = "hashicorp/random"
@@ -18,14 +17,6 @@ terraform {
       version = "~> 3.90"
     }
   }
-  cloud { 
-    
-    organization = "Terraform_Testing_Chidu" 
-
-    workspaces { 
-      name = "Terraform_CLI_Driven" 
-    } 
-  } 
 }
 provider "azurerm" {
   features {}
