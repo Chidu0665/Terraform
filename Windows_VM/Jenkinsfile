@@ -10,6 +10,9 @@ pipeline {
 
   stages {
 
+    /* ---------------------------------------------------------
+       READ DECOMPOSITION FILE
+       --------------------------------------------------------- */
     stage('Read Decomposition File') {
       steps {
         script {
@@ -19,7 +22,7 @@ pipeline {
             error "Decomposition file not found at ${path}"
           }
 
-          // GLOBAL config object
+          // Make config globally accessible
           config = readJSON file: path
 
           echo "Environment      : ${config.environment}"
@@ -29,6 +32,9 @@ pipeline {
       }
     }
 
+    /* ---------------------------------------------------------
+       TERRAFORM INIT & PLAN
+       --------------------------------------------------------- */
     stage('Terraform Init & Plan') {
       steps {
         dir('Windows_VM') {
@@ -40,9 +46,15 @@ pipeline {
       }
     }
 
+    /* ---------------------------------------------------------
+       CREATE PR (ONLY FROM NON-MAIN BRANCH)
+       --------------------------------------------------------- */
     stage('Create GitHub PR for Approval') {
       when {
-        expression { config.require_approval == true }
+        expression {
+          config.require_approval == true &&
+          env.BRANCH_NAME != 'main'
+        }
       }
       steps {
         withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN')]) {
@@ -53,14 +65,16 @@ pipeline {
             sh """
               gh auth status || echo "\$GITHUB_TOKEN" | gh auth login --with-token
 
-              if [ -z "\$CHANGE_ID" ]; then
-                echo "No PR detected. Creating PR..."
+              if [ -n "\$CHANGE_ID" ]; then
+                echo "PR already exists: #\$CHANGE_ID"
+              else
+                echo "Creating PR from ${env.BRANCH_NAME} to ${env.CHANGE_TARGET ?: 'main'}"
                 gh pr create \
                   --repo Chidu0665/Terraform \
+                  --head "${env.BRANCH_NAME}" \
+                  --base "${env.CHANGE_TARGET ?: 'main'}" \
                   --title "${title}" \
                   --body "${body}"
-              else
-                echo "PR already exists: #\$CHANGE_ID"
               fi
             """
           }
@@ -68,9 +82,15 @@ pipeline {
       }
     }
 
+    /* ---------------------------------------------------------
+       WAIT FOR PR APPROVAL
+       --------------------------------------------------------- */
     stage('Wait for PR Approval') {
       when {
-        expression { config.require_approval == true && env.CHANGE_ID != null }
+        expression {
+          config.require_approval == true &&
+          env.CHANGE_ID != null
+        }
       }
       steps {
         script {
@@ -78,7 +98,7 @@ pipeline {
             waitUntil {
               def status = sh(
                 script: """
-                  gh pr view \$CHANGE_ID \
+                  gh pr view ${env.CHANGE_ID} \
                     --repo Chidu0665/Terraform \
                     --json reviewDecision \
                     -q .reviewDecision
@@ -94,15 +114,25 @@ pipeline {
       }
     }
 
+    /* ---------------------------------------------------------
+       TERRAFORM APPLY / DESTROY (ONLY AFTER APPROVAL)
+       --------------------------------------------------------- */
     stage('Terraform Apply / Destroy') {
+      when {
+        expression {
+          config.require_approval == false || env.CHANGE_ID != null
+        }
+      }
       steps {
         dir('Windows_VM') {
           script {
             if (config.terraform_action == "apply") {
               sh 'terraform apply -auto-approve tfplan'
-            } else if (config.terraform_action == "destroy") {
+            }
+            else if (config.terraform_action == "destroy") {
               sh 'terraform destroy -auto-approve'
-            } else {
+            }
+            else {
               error "Invalid terraform_action: ${config.terraform_action}"
             }
           }
