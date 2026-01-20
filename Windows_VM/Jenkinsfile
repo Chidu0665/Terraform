@@ -6,27 +6,37 @@ pipeline {
     ARM_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
     ARM_TENANT_ID       = credentials('ARM_TENANT_ID')
     ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
-    
   }
 
   stages {
 
-
     stage('Read Decomposition File') {
       steps {
         script {
-          config = readJSON file: 'Windows_VM/decomposition.json'
-          echo "Requested Action: ${config.terraform_action}"
+          def path = 'Windows_VM/decomposition.json'
+
+          if (!fileExists(path)) {
+            error "Decomposition file not found at ${path}"
+          }
+
+          // Make config GLOBAL
+          config = readJSON file: path
+
+          echo "Environment      : ${config.environment}"
+          echo "Terraform Action : ${config.terraform_action}"
+          echo "Approval Needed  : ${config.require_approval}"
         }
       }
     }
 
     stage('Terraform Init & Plan') {
       steps {
-        sh '''
-          terraform init
-          terraform plan -out=tfplan
-        '''
+        dir('Windows_VM') {
+          sh '''
+            terraform init
+            terraform plan -out=tfplan
+          '''
+        }
       }
     }
 
@@ -35,12 +45,16 @@ pipeline {
         expression { config.require_approval == true }
       }
       steps {
-        sh '''
-          gh pr create \
-            --title "Terraform ${config.terraform_action} for ${config.environment}" \
-            --body "Terraform plan requires approval." \
-            --reviewer ${config.approvers.join(',')}
-        '''
+        withCredentials([string(credentialsId: 'Github-Classic-Token', variable: 'GITHUB_TOKEN')]) {
+          sh '''
+            gh auth status || echo "$GITHUB_TOKEN" | gh auth login --with-token
+
+            gh pr view || gh pr create \
+              --title "Terraform ${config.terraform_action} for ${config.environment}" \
+              --body "Terraform plan requires approval before ${config.terraform_action}." \
+              --reviewer ${config.approvers.join(',')}
+          '''
+        }
       }
     }
 
@@ -65,12 +79,15 @@ pipeline {
 
     stage('Terraform Apply / Destroy') {
       steps {
-        script {
-          if (config.terraform_action == "apply") {
-            sh 'terraform apply -auto-approve tfplan'
-          }
-          if (config.terraform_action == "destroy") {
-            sh 'terraform destroy -auto-approve'
+        dir('Windows_VM') {
+          script {
+            if (config.terraform_action == "apply") {
+              sh 'terraform apply -auto-approve tfplan'
+            } else if (config.terraform_action == "destroy") {
+              sh 'terraform destroy -auto-approve'
+            } else {
+              error "Invalid terraform_action: ${config.terraform_action}"
+            }
           }
         }
       }
