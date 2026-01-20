@@ -50,7 +50,7 @@ pipeline {
           sh '''
             gh auth status || echo "$GITHUB_TOKEN" | gh auth login --with-token
 
-            gh pr view || gh pr create \
+            gh pr view --repo Chidu0665/Terraform|| gh pr create \
               --title "Terraform ${config.terraform_action} for ${config.environment}" \
               --body "Terraform plan requires approval before ${config.terraform_action}." \
               --reviewer ${config.approvers.join(',')}
