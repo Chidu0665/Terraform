@@ -15,7 +15,7 @@ pipeline {
     stage('Read Decomposition File') {
       steps {
         script {
-          config = readJSON file: 'Windows_VM /deployment.json'
+          config = readJSON file: 'Windows_VM/decomposition.json'
           echo "Requested Action: ${config.terraform_action}"
         }
       }
