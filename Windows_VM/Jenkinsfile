@@ -10,6 +10,9 @@ pipeline {
 
   stages {
 
+    /* =========================================================
+       READ DECOMPOSITION FILE
+       ========================================================= */
     stage('Read Decomposition File') {
       steps {
         script {
@@ -19,7 +22,7 @@ pipeline {
             error "Decomposition file not found at ${path}"
           }
 
-          // Make config globally accessible
+          // Global config
           config = readJSON file: path
 
           echo "Environment      : ${config.environment}"
@@ -29,6 +32,9 @@ pipeline {
       }
     }
 
+    /* =========================================================
+       TERRAFORM INIT & PLAN
+       ========================================================= */
     stage('Terraform Init & Plan') {
       steps {
         dir('Windows_VM') {
@@ -40,7 +46,9 @@ pipeline {
       }
     }
 
-
+    /* =========================================================
+       CREATE PR (ONLY FROM FEATURE BRANCH)
+       ========================================================= */
     stage('Create GitHub PR for Approval') {
       when {
         expression {
@@ -49,14 +57,12 @@ pipeline {
         }
       }
       steps {
-        withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN')]) {
+        withCredentials([string(credentialsId: 'github-token-secret', variable: 'GH_TOKEN')]) {
           script {
             def title = "Terraform ${config.terraform_action} for ${config.environment}"
             def body  = "Terraform plan requires approval before ${config.terraform_action}."
 
             sh """
-              gh auth status || echo "\$GITHUB_TOKEN" | gh auth login --with-token
-
               if [ -n "\$CHANGE_ID" ]; then
                 echo "PR already exists: #\$CHANGE_ID"
               else
@@ -74,6 +80,9 @@ pipeline {
       }
     }
 
+    /* =========================================================
+       WAIT FOR PR APPROVAL (ONLY PR JOB)
+       ========================================================= */
     stage('Wait for PR Approval') {
       when {
         expression {
@@ -82,27 +91,32 @@ pipeline {
         }
       }
       steps {
-        script {
-          timeout(time: 24, unit: 'HOURS') {
-            waitUntil {
-              def status = sh(
-                script: """
-                  gh pr view ${env.CHANGE_ID} \
-                    --repo Chidu0665/Terraform \
-                    --json reviewDecision \
-                    -q .reviewDecision
-                """,
-                returnStdout: true
-              ).trim()
+        withCredentials([string(credentialsId: 'github-token-secret', variable: 'GH_TOKEN')]) {
+          script {
+            timeout(time: 1, unit: 'DAYS') {
+              waitUntil {
+                def status = sh(
+                  script: """
+                    gh pr view ${env.CHANGE_ID} \
+                      --repo Chidu0665/Terraform \
+                      --json reviewDecision \
+                      -q .reviewDecision
+                  """,
+                  returnStdout: true
+                ).trim()
 
-              echo "PR #${env.CHANGE_ID} review status: ${status}"
-              return status == "APPROVED"
+                echo "PR #${env.CHANGE_ID} review status: ${status}"
+                return status == "APPROVED"
+              }
             }
           }
         }
       }
     }
 
+    /* =========================================================
+       TERRAFORM APPLY / DESTROY (AFTER APPROVAL)
+       ========================================================= */
     stage('Terraform Apply / Destroy') {
       when {
         expression {
