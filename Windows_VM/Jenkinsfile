@@ -6,7 +6,6 @@ pipeline {
     ARM_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
     ARM_TENANT_ID       = credentials('ARM_TENANT_ID')
     ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
-    GITHUB_TOKEN = credentials('github-token-secret')
   }
 
   stages {
@@ -20,7 +19,7 @@ pipeline {
             error "Decomposition file not found at ${path}"
           }
 
-          // Make config GLOBAL
+          // GLOBAL config object
           config = readJSON file: path
 
           echo "Environment      : ${config.environment}"
@@ -47,30 +46,47 @@ pipeline {
       }
       steps {
         withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN')]) {
-          sh '''
-            gh auth status || echo "$GITHUB_TOKEN" | gh auth login --with-token
+          script {
+            def title = "Terraform ${config.terraform_action} for ${config.environment}"
+            def body  = "Terraform plan requires approval before ${config.terraform_action}."
 
-            gh pr view --repo Chidu0665/Terraform|| gh pr create \
-              --title "Terraform ${config.terraform_action} for ${config.environment}" \
-              --body "Terraform plan requires approval before ${config.terraform_action}." \
-              --reviewer ${config.approvers.join(',')}
-          '''
+            sh """
+              gh auth status || echo "\$GITHUB_TOKEN" | gh auth login --with-token
+
+              if [ -z "\$CHANGE_ID" ]; then
+                echo "No PR detected. Creating PR..."
+                gh pr create \
+                  --repo Chidu0665/Terraform \
+                  --title "${title}" \
+                  --body "${body}"
+              else
+                echo "PR already exists: #\$CHANGE_ID"
+              fi
+            """
+          }
         }
       }
     }
 
     stage('Wait for PR Approval') {
       when {
-        expression { config.require_approval == true }
+        expression { config.require_approval == true && env.CHANGE_ID != null }
       }
       steps {
         script {
           timeout(time: 24, unit: 'HOURS') {
             waitUntil {
               def status = sh(
-                script: "gh pr view --repo Chidu0665/Terraform --json reviewDecision -q .reviewDecision",
+                script: """
+                  gh pr view \$CHANGE_ID \
+                    --repo Chidu0665/Terraform \
+                    --json reviewDecision \
+                    -q .reviewDecision
+                """,
                 returnStdout: true
               ).trim()
+
+              echo "PR #${env.CHANGE_ID} review status: ${status}"
               return status == "APPROVED"
             }
           }
