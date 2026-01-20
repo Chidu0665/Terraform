@@ -68,7 +68,7 @@ pipeline {
           timeout(time: 24, unit: 'HOURS') {
             waitUntil {
               def status = sh(
-                script: "gh pr view --json reviewDecision -q .reviewDecision",
+                script: "gh pr view --repo Chidu0665/Terraform --json reviewDecision -q .reviewDecision",
                 returnStdout: true
               ).trim()
               return status == "APPROVED"
