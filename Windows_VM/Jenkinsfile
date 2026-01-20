@@ -1,0 +1,84 @@
+pipeline {
+  agent any
+
+  environment {
+    ARM_CLIENT_ID       = credentials('ARM_CLIENT_ID')
+    ARM_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
+    ARM_TENANT_ID       = credentials('ARM_TENANT_ID')
+    ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
+    GITHUB_TOKEN        = credentials('Github-Classic-Token')
+  }
+
+  stages {
+
+    stage('Clone') {
+      steps {
+        git branch : "main", url : "https://github.com/Chidu0665/Terraform.git"
+      }
+    }
+
+    stage('Read Decomposition File') {
+      steps {
+        script {
+          config = readJSON file: 'deployment.json'
+          echo "Requested Action: ${config.terraform_action}"
+        }
+      }
+    }
+
+    stage('Terraform Init & Plan') {
+      steps {
+        sh '''
+          terraform init
+          terraform plan -out=tfplan
+        '''
+      }
+    }
+
+    stage('Create GitHub PR for Approval') {
+      when {
+        expression { config.require_approval == true }
+      }
+      steps {
+        sh '''
+          gh pr create \
+            --title "Terraform ${config.terraform_action} for ${config.environment}" \
+            --body "Terraform plan requires approval." \
+            --reviewer ${config.approvers.join(',')}
+        '''
+      }
+    }
+
+    stage('Wait for PR Approval') {
+      when {
+        expression { config.require_approval == true }
+      }
+      steps {
+        script {
+          timeout(time: 24, unit: 'HOURS') {
+            waitUntil {
+              def status = sh(
+                script: "gh pr view --json reviewDecision -q .reviewDecision",
+                returnStdout: true
+              ).trim()
+              return status == "APPROVED"
+            }
+          }
+        }
+      }
+    }
+
+    stage('Terraform Apply / Destroy') {
+      steps {
+        script {
+          if (config.terraform_action == "apply") {
+            sh 'terraform apply -auto-approve tfplan'
+          }
+          if (config.terraform_action == "destroy") {
+            sh 'terraform destroy -auto-approve'
+          }
+        }
+      }
+    }
+  }
+}

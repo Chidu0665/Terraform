@@ -1,0 +1,7 @@
+{
+  "environment": "prod",
+  "terraform_action": "apply",
+  "require_approval": true,
+  "approvers": ["repo-admin","cloud-admin", "security-team"],
+  "auto_apply_after_approval": true
+}
