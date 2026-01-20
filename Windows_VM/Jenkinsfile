@@ -46,7 +46,7 @@ pipeline {
         expression { config.require_approval == true }
       }
       steps {
-        withCredentials([string(credentialsId: 'Github-Classic-Token', variable: 'GITHUB_TOKEN')]) {
+        withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN')]) {
           sh '''
             gh auth status || echo "$GITHUB_TOKEN" | gh auth login --with-token
 
