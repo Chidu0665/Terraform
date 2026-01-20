@@ -10,9 +10,6 @@ pipeline {
 
   stages {
 
-    /* ---------------------------------------------------------
-       READ DECOMPOSITION FILE
-       --------------------------------------------------------- */
     stage('Read Decomposition File') {
       steps {
         script {
@@ -32,9 +29,6 @@ pipeline {
       }
     }
 
-    /* ---------------------------------------------------------
-       TERRAFORM INIT & PLAN
-       --------------------------------------------------------- */
     stage('Terraform Init & Plan') {
       steps {
         dir('Windows_VM') {
@@ -46,9 +40,7 @@ pipeline {
       }
     }
 
-    /* ---------------------------------------------------------
-       CREATE PR (ONLY FROM NON-MAIN BRANCH)
-       --------------------------------------------------------- */
+
     stage('Create GitHub PR for Approval') {
       when {
         expression {
@@ -82,9 +74,6 @@ pipeline {
       }
     }
 
-    /* ---------------------------------------------------------
-       WAIT FOR PR APPROVAL
-       --------------------------------------------------------- */
     stage('Wait for PR Approval') {
       when {
         expression {
@@ -114,9 +103,6 @@ pipeline {
       }
     }
 
-    /* ---------------------------------------------------------
-       TERRAFORM APPLY / DESTROY (ONLY AFTER APPROVAL)
-       --------------------------------------------------------- */
     stage('Terraform Apply / Destroy') {
       when {
         expression {
